@@ -1,0 +1,10 @@
+global using Fonts;
+global using SpiritualJourney.Core;
+global using SpiritualJourney.Core.Enums;
+global using SpiritualJourney.Data;
+global using SpiritualJourney.Data.Repositories;
+global using SpiritualJourney.Services;
+global using SpiritualJourney.Services.Contracts;
+global using SpiritualJourney.Models;
+global using SpiritualJourney.PageModels;
+global using SpiritualJourney.Pages;
