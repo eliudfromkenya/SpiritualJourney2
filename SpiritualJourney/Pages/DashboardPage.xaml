@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:pullToRefresh="clr-namespace:Syncfusion.Maui.Toolkit.PullToRefresh;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:shimmer="clr-namespace:Syncfusion.Maui.Toolkit.Shimmer;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:charts="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:pageModels="clr-namespace:SpiritualJourney.PageModels"
+             xmlns:models="clr-namespace:SpiritualJourney.Models"
+             x:Class="SpiritualJourney.Pages.DashboardPage"
+             x:DataType="pageModels:DashboardPageModel"
+             Title="Dashboard">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <pullToRefresh:SfPullToRefresh
+        IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}"
+        RefreshCommand="{Binding RefreshCommand}">
+
+        <pullToRefresh:SfPullToRefresh.PullableContent>
+            <ScrollView>
+                <VerticalStackLayout Padding="{OnIdiom 15, Desktop=30}"
+                                      Spacing="20">
+
+                    <Label Text="{Binding Today}"
+                           Style="{StaticResource Title2}" />
+
+                    <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                       IsVisible="{Binding IsBusy}" />
+
+                    <shimmer:SfShimmer IsActive="{Binding IsBusy}">
+                        <VerticalStackLayout Spacing="20">
+
+                            <Grid RowDefinitions="Auto, Auto"
+                                  ColumnDefinitions="*, *"
+                                  ColumnSpacing="10"
+                                  RowSpacing="10">
+
+                                <Border Grid.Row="0"
+                                        Grid.Column="0"
+                                        Style="{StaticResource KpiCard}">
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label Text="Translations"
+                                               Style="{StaticResource Caption1Strong}" />
+                                        <Label Text="{Binding DashboardData.TranslationCount}"
+                                               Style="{StaticResource Title3}" />
+                                    </VerticalStackLayout>
+                                </Border>
+
+                                <Border Grid.Row="0"
+                                        Grid.Column="1"
+                                        Style="{StaticResource KpiCard}">
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label Text="Memory Due"
+                                               Style="{StaticResource Caption1Strong}" />
+                                        <Label Text="{Binding DashboardData.MemoryDueCount}"
+                                               Style="{StaticResource Title3}" />
+                                    </VerticalStackLayout>
+                                </Border>
+
+                                <Border Grid.Row="1"
+                                        Grid.Column="0"
+                                        Style="{StaticResource KpiCard}">
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label Text="Open Tasks"
+                                               Style="{StaticResource Caption1Strong}" />
+                                        <Label Text="{Binding DashboardData.OpenTaskCount}"
+                                               Style="{StaticResource Title3}" />
+                                    </VerticalStackLayout>
+                                </Border>
+
+                                <Border Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource KpiCard}">
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label Text="Sermons"
+                                               Style="{StaticResource Caption1Strong}" />
+                                        <Label Text="{Binding DashboardData.SermonCount}"
+                                               Style="{StaticResource Title3}" />
+                                    </VerticalStackLayout>
+                                </Border>
+
+                            </Grid>
+
+                            <Border Style="{StaticResource CardStyle}">
+                                <VerticalStackLayout Spacing="10">
+                                    <Label Text="Task Status Distribution"
+                                           Style="{StaticResource Body1Strong}" />
+                                    <charts:SfCircularChart HeightRequest="250">
+                                        <charts:SfCircularChart.Series>
+                                            <charts:DoughnutSeries
+                                                ItemsSource="{Binding DashboardData.TaskStatusDistribution}"
+                                                XBindingPath="Label"
+                                                YBindingPath="Value" />
+                                        </charts:SfCircularChart.Series>
+                                    </charts:SfCircularChart>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border Style="{StaticResource CardStyle}">
+                                <VerticalStackLayout Spacing="10">
+                                    <Label Text="Sermon Delivery Trend"
+                                           Style="{StaticResource Body1Strong}" />
+                                    <charts:SfCartesianChart HeightRequest="250">
+                                        <charts:SfCartesianChart.Series>
+                                            <charts:ColumnSeries
+                                                ItemsSource="{Binding DashboardData.SermonDeliveryTrend}"
+                                                XBindingPath="Label"
+                                                YBindingPath="Value" />
+                                        </charts:SfCartesianChart.Series>
+                                    </charts:SfCartesianChart>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border Style="{StaticResource CardStyle}">
+                                <VerticalStackLayout Spacing="10">
+                                    <Label Text="Quick Navigation"
+                                           Style="{StaticResource Body1Strong}" />
+                                    <Grid ColumnDefinitions="*, *, *"
+                                          ColumnSpacing="10">
+                                        <Button Grid.Column="0"
+                                                Text="Bible"
+                                                Command="{Binding NavigateToBibleCommand}" />
+                                        <Button Grid.Column="1"
+                                                Text="Tasks"
+                                                Command="{Binding NavigateToTasksCommand}" />
+                                        <Button Grid.Column="2"
+                                                Text="Memory"
+                                                Command="{Binding NavigateToMemoryCommand}" />
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Border>
+
+                        </VerticalStackLayout>
+                    </shimmer:SfShimmer>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </pullToRefresh:SfPullToRefresh.PullableContent>
+
+    </pullToRefresh:SfPullToRefresh>
+
+</ContentPage>

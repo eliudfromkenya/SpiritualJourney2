@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:pageModels="clr-namespace:SpiritualJourney.PageModels"
+             xmlns:models="clr-namespace:SpiritualJourney.Models"
+             x:Class="SpiritualJourney.Pages.SettingsPage"
+             x:DataType="pageModels:SettingsPageModel"
+             Title="Settings">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{OnIdiom 15, Desktop=30}"
+                              Spacing="20">
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
+
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="User"
+                           Style="{StaticResource Body1Strong}" />
+                    <Label Text="{Binding CurrentUser.DisplayName}"
+                           Style="{StaticResource Body2}" />
+                    <Label Text="{Binding CurrentUser.Email}"
+                           Style="{StaticResource Caption1}"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Color Palette"
+                           Style="{StaticResource Body1Strong}" />
+
+                    <HorizontalStackLayout Spacing="10"
+                                           HorizontalOptions="Center">
+                        <Button Text="Blue"
+                                Clicked="OnPaletteBlueClicked"
+                                BackgroundColor="#2196F3"
+                                TextColor="White"
+                                WidthRequest="80" />
+                        <Button Text="Green"
+                                Clicked="OnPaletteGreenClicked"
+                                BackgroundColor="#4CAF50"
+                                TextColor="White"
+                                WidthRequest="80" />
+                        <Button Text="Pink"
+                                Clicked="OnPalettePinkClicked"
+                                BackgroundColor="#E91E63"
+                                TextColor="White"
+                                WidthRequest="80" />
+                        <Button Text="White"
+                                Clicked="OnPaletteWhiteClicked"
+                                BackgroundColor="#607D8B"
+                                TextColor="White"
+                                WidthRequest="80" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Theme Mode"
+                           Style="{StaticResource Body1Strong}" />
+
+                    <HorizontalStackLayout Spacing="15"
+                                           HorizontalOptions="Center">
+                        <Button Text="Light"
+                                Clicked="OnModeLightClicked"
+                                ImageSource="{StaticResource IconLight}"
+                                WidthRequest="120" />
+                        <Button Text="Dark"
+                                Clicked="OnModeDarkClicked"
+                                ImageSource="{StaticResource IconDark}"
+                                WidthRequest="120" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Sign Out"
+                    Command="{Binding SignOutCommand}"
+                    BackgroundColor="{StaticResource Magenta}"
+                    HorizontalOptions="Fill" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

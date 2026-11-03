@@ -28,4 +28,12 @@ public interface IAuthService
 
     /// <summary>Signs out and clears the persisted session.</summary>
     Task SignOutAsync(CancellationToken ct = default);
+
+    /// <summary>Creates a new user account with email and password, then signs them in.</summary>
+    /// <returns><c>true</c> if registration succeeded; <c>false</c> if the email is already registered.</returns>
+    Task<bool> RegisterAsync(string displayName, string email, string password, CancellationToken ct = default);
+
+    /// <summary>Resets the password for the account associated with the given email.</summary>
+    /// <returns><c>true</c> if the password was reset; <c>false</c> if no account exists for the email.</returns>
+    Task<bool> ResetPasswordAsync(string email, string newPassword, CancellationToken ct = default);
 }

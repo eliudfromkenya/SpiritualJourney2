@@ -1,24 +1,79 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
-    <Color x:Key="Primary">#512BD4</Color>
-    <Color x:Key="PrimaryDark">#ac99ea</Color>
+    <!--
+        Default palette: Blue.
+        The ten keys below are the ones the ThemeService swaps at runtime when
+        switching palettes (Blue, Green, Pink, White) and light/dark modes.
+        Palette-specific color sets are defined further below as {Palette}{Key}
+        resources so the ThemeService can look them up by name.
+    -->
+    <Color x:Key="Primary">#2196F3</Color>
+    <Color x:Key="PrimaryDark">#0D47A1</Color>
     <Color x:Key="PrimaryDarkText">#242424</Color>
-    <Color x:Key="Secondary">#DFD8F7</Color>
-    <Color x:Key="SecondaryDarkText">#9880e5</Color>
-    <Color x:Key="Tertiary">#2B0B98</Color>
+    <Color x:Key="Secondary">#BBDEFB</Color>
+    <Color x:Key="SecondaryDarkText">#0D47A1</Color>
+    <Color x:Key="Tertiary">#1565C0</Color>
 
-    <Color x:Key="DarkBackground">#17171a</Color>
-    <Color x:Key="LightOnDarkBackground">#C3C3C3</Color>
-    <Color x:Key="LightBackground">#F2F2F2</Color>
+    <Color x:Key="DarkBackground">#0D47A1</Color>
+    <Color x:Key="LightOnDarkBackground">#FFFFFF</Color>
+    <Color x:Key="LightBackground">#FFFFFF</Color>
     <Color x:Key="DarkOnLightBackground">#0D0D0D</Color>
 
-    <Color x:Key="LightSecondaryBackground">#E0E0E0</Color>
-    <Color x:Key="DarkSecondaryBackground">#222228</Color>
+    <Color x:Key="LightSecondaryBackground">#E3F2FD</Color>
+    <Color x:Key="DarkSecondaryBackground">#102A4E</Color>
+
+    <!-- Blue Palette: sky blue light (#2196F3) / dark navy dark (#0D47A1) -->
+    <Color x:Key="BluePrimary">#2196F3</Color>
+    <Color x:Key="BluePrimaryDark">#0D47A1</Color>
+    <Color x:Key="BlueSecondary">#BBDEFB</Color>
+    <Color x:Key="BlueTertiary">#1565C0</Color>
+    <Color x:Key="BlueDarkBackground">#0D47A1</Color>
+    <Color x:Key="BlueLightOnDarkBackground">#FFFFFF</Color>
+    <Color x:Key="BlueLightBackground">#FFFFFF</Color>
+    <Color x:Key="BlueDarkOnLightBackground">#0D0D0D</Color>
+    <Color x:Key="BlueLightSecondaryBackground">#E3F2FD</Color>
+    <Color x:Key="BlueDarkSecondaryBackground">#102A4E</Color>
+
+    <!-- Green Palette: light green light (#4CAF50) / dark olive green dark (#1B5E20) -->
+    <Color x:Key="GreenPrimary">#4CAF50</Color>
+    <Color x:Key="GreenPrimaryDark">#1B5E20</Color>
+    <Color x:Key="GreenSecondary">#C8E6C9</Color>
+    <Color x:Key="GreenTertiary">#388E3C</Color>
+    <Color x:Key="GreenDarkBackground">#1B5E20</Color>
+    <Color x:Key="GreenLightOnDarkBackground">#FFFFFF</Color>
+    <Color x:Key="GreenLightBackground">#F1F8E9</Color>
+    <Color x:Key="GreenDarkOnLightBackground">#0D0D0D</Color>
+    <Color x:Key="GreenLightSecondaryBackground">#DCEDC8</Color>
+    <Color x:Key="GreenDarkSecondaryBackground">#0F3D14</Color>
+
+    <!-- Pink Palette: light pink light (#E91E63) / dark red dark (#880E4F) -->
+    <Color x:Key="PinkPrimary">#E91E63</Color>
+    <Color x:Key="PinkPrimaryDark">#880E4F</Color>
+    <Color x:Key="PinkSecondary">#F8BBD0</Color>
+    <Color x:Key="PinkTertiary">#C2185B</Color>
+    <Color x:Key="PinkDarkBackground">#880E4F</Color>
+    <Color x:Key="PinkLightOnDarkBackground">#FFFFFF</Color>
+    <Color x:Key="PinkLightBackground">#FCE4EC</Color>
+    <Color x:Key="PinkDarkOnLightBackground">#0D0D0D</Color>
+    <Color x:Key="PinkLightSecondaryBackground">#F8BBD0</Color>
+    <Color x:Key="PinkDarkSecondaryBackground">#4A0829</Color>
+
+    <!-- White Palette: smoke white light (#607D8B) / black dark (#000000) -->
+    <Color x:Key="WhitePrimary">#607D8B</Color>
+    <Color x:Key="WhitePrimaryDark">#000000</Color>
+    <Color x:Key="WhiteSecondary">#ECEFF1</Color>
+    <Color x:Key="WhiteTertiary">#455A64</Color>
+    <Color x:Key="WhiteDarkBackground">#000000</Color>
+    <Color x:Key="WhiteLightOnDarkBackground">#FFFFFF</Color>
+    <Color x:Key="WhiteLightBackground">#FFFFFF</Color>
+    <Color x:Key="WhiteDarkOnLightBackground">#0D0D0D</Color>
+    <Color x:Key="WhiteLightSecondaryBackground">#ECEFF1</Color>
+    <Color x:Key="WhiteDarkSecondaryBackground">#1A1A1A</Color>
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>

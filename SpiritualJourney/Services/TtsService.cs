@@ -9,6 +9,7 @@ namespace SpiritualJourney.Services;
 public class TtsService : ITtsService
 {
     private readonly SemaphoreSlim _playbackGate = new(1, 1);
+    private CancellationTokenSource? _cts;
     private bool _isPlaying;
 
     /// <inheritdoc/>
@@ -21,24 +22,28 @@ public class TtsService : ITtsService
         {
             return;
         }
+
         await _playbackGate.WaitAsync(ct).ConfigureAwait(false);
         try
         {
+            _cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
             _isPlaying = true;
-            var options = new SpeakOptions();
-            await TextToSpeech.Default.SpeakAsync(text, options, ct).ConfigureAwait(false);
+            await TextToSpeech.Default.SpeakAsync(text, null, _cts.Token).ConfigureAwait(false);
         }
         finally
         {
             _isPlaying = false;
+            _cts?.Dispose();
+            _cts = null;
             _playbackGate.Release();
         }
     }
 
     /// <inheritdoc/>
-    public async Task StopAsync(CancellationToken ct = default)
+    public Task StopAsync(CancellationToken ct = default)
     {
-        await TextToSpeech.Default.CancelAsync(ct).ConfigureAwait(false);
+        _cts?.Cancel();
         _isPlaying = false;
+        return Task.CompletedTask;
     }
 }

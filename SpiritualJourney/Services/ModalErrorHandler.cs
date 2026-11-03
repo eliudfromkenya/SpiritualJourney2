@@ -1,5 +1,3 @@
-using CommunityToolkit.Maui;
-
 namespace SpiritualJourney.Services;
 
 /// <summary>
@@ -13,7 +11,7 @@ public class ModalErrorHandler : IErrorHandler
     /// <inheritdoc/>
     public void HandleError(Exception ex)
     {
-        DisplayAlertAsync(ex).FireAndForgetSafeAsync();
+        _ = DisplayAlertAsync(ex);
     }
 
     private async Task DisplayAlertAsync(Exception ex)

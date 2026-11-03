@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:pageModels="clr-namespace:SpiritualJourney.PageModels"
+             xmlns:models="clr-namespace:SpiritualJourney.Models"
+             x:Class="SpiritualJourney.Pages.MemoryReviewPage"
+             x:DataType="pageModels:MemoryReviewPageModel"
+             Title="Memory Review">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{OnIdiom 15, Desktop=30}"
+                              Spacing="20">
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
+
+            <Border Style="{StaticResource CardStyle}">
+                <HorizontalStackLayout Spacing="10"
+                                       HorizontalOptions="Center">
+                    <Image Source="{StaticResource IconRibbon}"
+                           WidthRequest="24"
+                           HeightRequest="24" />
+                    <Label VerticalOptions="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Streak: " Style="{StaticResource Body1Strong}" />
+                                <Span Text="{Binding Streak}" Style="{StaticResource Body1Strong}" />
+                                <Span Text=" days" Style="{StaticResource Body1}" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </HorizontalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Current Verse"
+                           Style="{StaticResource Body1Strong}" />
+
+                    <Label Text="{Binding CurrentVerse.Verse.Text}"
+                           Style="{StaticResource Title3}"
+                           HorizontalOptions="Fill" />
+
+                    <Button Text="Listen"
+                            Command="{Binding ListenCommand}"
+                            HorizontalOptions="Start" />
+
+                    <HorizontalStackLayout Spacing="15"
+                                           HorizontalOptions="Center">
+                        <Button Text="Easy"
+                                Command="{Binding ReviewEasyCommand}"
+                                BackgroundColor="{StaticResource Primary}" />
+                        <Button Text="Hard"
+                                Command="{Binding ReviewHardCommand}"
+                                BackgroundColor="{StaticResource Tertiary}" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="All Memory Verses"
+                   Style="{StaticResource Body1Strong}" />
+
+            <CollectionView ItemsSource="{Binding AllVerses}"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:MemoryVerse">
+                        <Border Style="{StaticResource CardStyle}"
+                                Margin="0,0,0,10">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding Verse.Text}"
+                                       Style="{StaticResource Body2}" />
+                                <Label Style="{StaticResource Caption2}"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Next review: " />
+                                            <Span Text="{Binding NextReviewAtUtc, StringFormat='{0:d}'}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

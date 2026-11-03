@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:pageModels="clr-namespace:SpiritualJourney.PageModels"
+             xmlns:models="clr-namespace:SpiritualJourney.Models"
+             x:Class="SpiritualJourney.Pages.SermonsPage"
+             x:DataType="pageModels:SermonsPageModel"
+             Title="Sermons">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{OnIdiom 15, Desktop=30}"
+                              Spacing="15">
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
+
+            <Grid ColumnDefinitions="*, Auto"
+                  ColumnSpacing="10">
+                <sf:SfTextInputLayout Grid.Column="0"
+                                      Hint="Search sermons"
+                                      ContainerType="Outlined">
+                    <Entry Text="{Binding SearchQuery}" />
+                </sf:SfTextInputLayout>
+                <Button Grid.Column="1"
+                        Text="Search"
+                        Command="{Binding SearchCommand}"
+                        VerticalOptions="Center" />
+            </Grid>
+
+            <CollectionView ItemsSource="{Binding Sermons}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedSermon}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Sermon">
+                        <Border Style="{StaticResource CardStyle}"
+                                Margin="0,0,0,10">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding Title}"
+                                       Style="{StaticResource Body1Strong}" />
+                                <Label Text="{Binding DeliveryDate, StringFormat='Delivered: {0:d}'}"
+                                       Style="{StaticResource Caption1}" />
+                                <Label Text="{Binding Tags}"
+                                       Style="{StaticResource Caption2}"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button Text="Delete"
+                    Command="{Binding DeleteSermonCommand}"
+                    BackgroundColor="{StaticResource Magenta}"
+                    HorizontalOptions="Start" />
+
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Add / Edit Sermon"
+                           Style="{StaticResource Body1Strong}" />
+
+                    <sf:SfTextInputLayout Hint="Title"
+                                          ContainerType="Outlined">
+                        <Entry Text="{Binding Title}" />
+                    </sf:SfTextInputLayout>
+
+                    <sf:SfTextInputLayout Hint="Content"
+                                          ContainerType="Outlined">
+                        <Editor Text="{Binding Content}"
+                                AutoSize="TextChanges"
+                                MinimumHeightRequest="120" />
+                    </sf:SfTextInputLayout>
+
+                    <sf:SfTextInputLayout Hint="Tags (comma-separated)"
+                                          ContainerType="Outlined">
+                        <Entry Text="{Binding Tags}" />
+                    </sf:SfTextInputLayout>
+
+                    <Grid ColumnDefinitions="*, *"
+                          ColumnSpacing="10">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="5">
+                            <Label Text="Delivery Date"
+                                   Style="{StaticResource Caption1Strong}" />
+                            <DatePicker Date="{Binding DeliveryDate}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="5">
+                            <Label Text="Venue"
+                                   Style="{StaticResource Caption1Strong}" />
+                            <Picker Title="Select venue"
+                                    ItemsSource="{Binding Venues}"
+                                    ItemDisplayBinding="{Binding Name}"
+                                    SelectedItem="{Binding SelectedVenue}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Button Text="Save"
+                            Command="{Binding SaveSermonCommand}" />
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

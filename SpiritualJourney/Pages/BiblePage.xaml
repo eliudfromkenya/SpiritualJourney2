@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:pageModels="clr-namespace:SpiritualJourney.PageModels"
+             xmlns:models="clr-namespace:SpiritualJourney.Models"
+             xmlns:enums="clr-namespace:SpiritualJourney.Core.Enums"
+             x:Class="SpiritualJourney.Pages.BiblePage"
+             x:DataType="pageModels:BiblePageModel"
+             Title="Bible">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{OnIdiom 15, Desktop=30}"
+                              Spacing="15">
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
+
+            <Grid ColumnDefinitions="*, *, *"
+                  ColumnSpacing="10">
+                <Picker Grid.Column="0"
+                        Title="Translation"
+                        ItemsSource="{Binding Translations}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedTranslation}"
+                        SelectedIndexChanged="OnTranslationChanged" />
+                <Picker Grid.Column="1"
+                        Title="Book"
+                        ItemsSource="{Binding Books}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedBook}"
+                        SelectedIndexChanged="OnBookChanged" />
+                <Picker Grid.Column="2"
+                        Title="Chapter"
+                        ItemsSource="{Binding Chapters}"
+                        SelectedItem="{Binding SelectedChapter}"
+                        SelectedIndexChanged="OnChapterChanged" />
+            </Grid>
+
+            <Grid ColumnDefinitions="*, Auto"
+                  ColumnSpacing="10">
+                <sf:SfTextInputLayout Grid.Column="0"
+                                      Hint="Reference (e.g. Romans 3:23)"
+                                      ContainerType="Outlined">
+                    <Entry Text="{Binding ReferenceInput}" />
+                </sf:SfTextInputLayout>
+                <Button Grid.Column="1"
+                        Text="Go"
+                        Command="{Binding ParseReferenceCommand}"
+                        VerticalOptions="Center" />
+            </Grid>
+
+            <Grid ColumnDefinitions="*, Auto"
+                  ColumnSpacing="10">
+                <sf:SfTextInputLayout Grid.Column="0"
+                                      Hint="Search verses"
+                                      ContainerType="Outlined">
+                    <Entry Text="{Binding SearchQuery}" />
+                </sf:SfTextInputLayout>
+                <Button Grid.Column="1"
+                        Text="Search"
+                        Command="{Binding SearchCommand}"
+                        VerticalOptions="Center" />
+            </Grid>
+
+            <Label Text="{Binding ErrorMessage}"
+                   Style="{StaticResource Caption1}"
+                   TextColor="{StaticResource Magenta}" />
+
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Selected Verses Actions"
+                           Style="{StaticResource Body1Strong}" />
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Button Text="Memorize"
+                                Command="{Binding SaveMemoryCommand}" />
+                    </HorizontalStackLayout>
+
+                    <Grid ColumnDefinitions="*, Auto"
+                          ColumnSpacing="10">
+                        <sf:SfTextInputLayout Grid.Column="0"
+                                              Hint="Add a note"
+                                              ContainerType="Outlined">
+                            <Entry x:Name="NoteEntry" />
+                        </sf:SfTextInputLayout>
+                        <Button Grid.Column="1"
+                                Text="Add Note"
+                                Command="{Binding AddNoteCommand}"
+                                CommandParameter="{Binding Source={x:Reference NoteEntry}, Path=Text}"
+                                VerticalOptions="Center" />
+                    </Grid>
+
+                    <Label Text="Highlight"
+                           Style="{StaticResource Caption1Strong}" />
+                    <HorizontalStackLayout Spacing="10">
+                        <Button Text="Y"
+                                BackgroundColor="#FFEB3B"
+                                TextColor="Black"
+                                Command="{Binding SaveHighlightCommand}"
+                                CommandParameter="{x:Static enums:HighlightColor.Yellow}" />
+                        <Button Text="G"
+                                BackgroundColor="#4CAF50"
+                                TextColor="White"
+                                Command="{Binding SaveHighlightCommand}"
+                                CommandParameter="{x:Static enums:HighlightColor.Green}" />
+                        <Button Text="B"
+                                BackgroundColor="#2196F3"
+                                TextColor="White"
+                                Command="{Binding SaveHighlightCommand}"
+                                CommandParameter="{x:Static enums:HighlightColor.Blue}" />
+                        <Button Text="P"
+                                BackgroundColor="#E91E63"
+                                TextColor="White"
+                                Command="{Binding SaveHighlightCommand}"
+                                CommandParameter="{x:Static enums:HighlightColor.Pink}" />
+                        <Button Text="O"
+                                BackgroundColor="#FF9800"
+                                TextColor="White"
+                                Command="{Binding SaveHighlightCommand}"
+                                CommandParameter="{x:Static enums:HighlightColor.Orange}" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="Verses"
+                   Style="{StaticResource Body1Strong}" />
+
+            <CollectionView x:Name="VersesCollectionView"
+                            ItemsSource="{Binding Verses}"
+                            SelectionMode="Multiple"
+                            SelectionChanged="OnVersesSelectionChanged">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:BibleVerse">
+                        <Border Style="{StaticResource CardStyle}"
+                                Margin="0,0,0,10">
+                            <Grid ColumnDefinitions="Auto, *, Auto"
+                                  ColumnSpacing="10">
+                                <Label Grid.Column="0"
+                                       Text="{Binding Number}"
+                                       Style="{StaticResource Body1Strong}"
+                                       VerticalOptions="Start" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding Text}"
+                                       Style="{StaticResource Body2}" />
+                                <Button Grid.Column="2"
+                                        Text="Listen"
+                                        Command="{Binding BindingContext.ListenVerseCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                        CommandParameter="{Binding .}"
+                                        VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="Search Results"
+                   Style="{StaticResource Body1Strong}"
+                   IsVisible="{Binding SearchResults.Count, Converter={toolkit:IntToBoolConverter}}" />
+
+            <CollectionView ItemsSource="{Binding SearchResults}"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:BibleSearchResult">
+                        <Border Style="{StaticResource CardStyle}"
+                                Margin="0,0,0,10">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding Reference}"
+                                       Style="{StaticResource Body2Strong}" />
+                                <Label Text="{Binding Snippet}"
+                                       Style="{StaticResource Caption1}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

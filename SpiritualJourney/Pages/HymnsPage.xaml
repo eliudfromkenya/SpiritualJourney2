@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:pageModels="clr-namespace:SpiritualJourney.PageModels"
+             xmlns:models="clr-namespace:SpiritualJourney.Models"
+             x:Class="SpiritualJourney.Pages.HymnsPage"
+             x:DataType="pageModels:HymnsPageModel"
+             Title="Hymns">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{OnIdiom 15, Desktop=30}"
+                              Spacing="15">
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
+
+            <Grid ColumnDefinitions="*, Auto"
+                  ColumnSpacing="10">
+                <sf:SfTextInputLayout Grid.Column="0"
+                                      Hint="Search hymns"
+                                      ContainerType="Outlined">
+                    <Entry Text="{Binding SearchQuery}" />
+                </sf:SfTextInputLayout>
+                <Button Grid.Column="1"
+                        Text="Search"
+                        Command="{Binding SearchCommand}"
+                        VerticalOptions="Center" />
+            </Grid>
+
+            <CollectionView ItemsSource="{Binding Hymns}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedHymn}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Hymn">
+                        <Border Style="{StaticResource CardStyle}"
+                                Margin="0,0,0,10">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding Title}"
+                                       Style="{StaticResource Body1Strong}" />
+                                <Label Text="{Binding Author}"
+                                       Style="{StaticResource Caption1}" />
+                                <Label Text="{Binding Tags}"
+                                       Style="{StaticResource Caption2}"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <HorizontalStackLayout Spacing="15">
+                <Button Text="Listen"
+                        Command="{Binding ListenCommand}" />
+                <Button Text="Delete"
+                        Command="{Binding DeleteHymnCommand}"
+                        BackgroundColor="{StaticResource Magenta}" />
+            </HorizontalStackLayout>
+
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Add / Edit Hymn"
+                           Style="{StaticResource Body1Strong}" />
+
+                    <sf:SfTextInputLayout Hint="Title"
+                                          ContainerType="Outlined">
+                        <Entry Text="{Binding Title}" />
+                    </sf:SfTextInputLayout>
+
+                    <sf:SfTextInputLayout Hint="Author"
+                                          ContainerType="Outlined">
+                        <Entry Text="{Binding Author}" />
+                    </sf:SfTextInputLayout>
+
+                    <sf:SfTextInputLayout Hint="Tags (comma-separated)"
+                                          ContainerType="Outlined">
+                        <Entry Text="{Binding Tags}" />
+                    </sf:SfTextInputLayout>
+
+                    <sf:SfTextInputLayout Hint="Lyric Language"
+                                          ContainerType="Outlined">
+                        <Entry Text="{Binding LyricLanguage}" />
+                    </sf:SfTextInputLayout>
+
+                    <sf:SfTextInputLayout Hint="Lyric Content"
+                                          ContainerType="Outlined">
+                        <Editor Text="{Binding LyricContent}"
+                                AutoSize="TextChanges"
+                                MinimumHeightRequest="100" />
+                    </sf:SfTextInputLayout>
+
+                    <Button Text="Save"
+                            Command="{Binding SaveHymnCommand}" />
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

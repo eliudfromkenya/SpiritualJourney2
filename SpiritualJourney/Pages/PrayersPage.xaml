@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:pageModels="clr-namespace:SpiritualJourney.PageModels"
+             xmlns:models="clr-namespace:SpiritualJourney.Models"
+             x:Class="SpiritualJourney.Pages.PrayersPage"
+             x:DataType="pageModels:PrayersPageModel"
+             Title="Prayers">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{OnIdiom 15, Desktop=30}"
+                              Spacing="15">
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
+
+            <Grid ColumnDefinitions="*, Auto"
+                  ColumnSpacing="10">
+                <sf:SfTextInputLayout Grid.Column="0"
+                                      Hint="Search prayers"
+                                      ContainerType="Outlined">
+                    <Entry Text="{Binding SearchQuery}" />
+                </sf:SfTextInputLayout>
+                <Button Grid.Column="1"
+                        Text="Search"
+                        Command="{Binding SearchCommand}"
+                        VerticalOptions="Center" />
+            </Grid>
+
+            <CollectionView ItemsSource="{Binding Prayers}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedPrayer}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Prayer">
+                        <Border Style="{StaticResource CardStyle}"
+                                Margin="0,0,0,10">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding Title}"
+                                       Style="{StaticResource Body1Strong}" />
+                                <Label Text="{Binding Category}"
+                                       Style="{StaticResource Caption1}" />
+                                <Label Text="{Binding Tags}"
+                                       Style="{StaticResource Caption2}"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <HorizontalStackLayout Spacing="15">
+                <Button Text="Listen"
+                        Command="{Binding ListenCommand}" />
+                <Button Text="Delete"
+                        Command="{Binding DeletePrayerCommand}"
+                        BackgroundColor="{StaticResource Magenta}" />
+            </HorizontalStackLayout>
+
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Add / Edit Prayer"
+                           Style="{StaticResource Body1Strong}" />
+
+                    <sf:SfTextInputLayout Hint="Title"
+                                          ContainerType="Outlined">
+                        <Entry Text="{Binding Title}" />
+                    </sf:SfTextInputLayout>
+
+                    <sf:SfTextInputLayout Hint="Content"
+                                          ContainerType="Outlined">
+                        <Editor Text="{Binding Content}"
+                                AutoSize="TextChanges"
+                                MinimumHeightRequest="120" />
+                    </sf:SfTextInputLayout>
+
+                    <sf:SfTextInputLayout Hint="Category"
+                                          ContainerType="Outlined">
+                        <Entry Text="{Binding Category}" />
+                    </sf:SfTextInputLayout>
+
+                    <sf:SfTextInputLayout Hint="Tags (comma-separated)"
+                                          ContainerType="Outlined">
+                        <Entry Text="{Binding Tags}" />
+                    </sf:SfTextInputLayout>
+
+                    <Button Text="Save"
+                            Command="{Binding SavePrayerCommand}" />
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

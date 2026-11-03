@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:pageModels="clr-namespace:SpiritualJourney.PageModels"
+             xmlns:models="clr-namespace:SpiritualJourney.Models"
+             xmlns:enums="clr-namespace:SpiritualJourney.Core.Enums"
+             x:Class="SpiritualJourney.Pages.TasksPage"
+             x:DataType="pageModels:TasksPageModel"
+             Title="Tasks">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{OnIdiom 15, Desktop=30}"
+                              Spacing="15">
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
+
+            <ScrollView Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Never">
+                <HorizontalStackLayout Spacing="10">
+                    <Button Text="All"
+                            Clicked="OnFilterAllClicked" />
+                    <Button Text="Today"
+                            Clicked="OnFilterTodayClicked" />
+                    <Button Text="Week"
+                            Clicked="OnFilterWeekClicked" />
+                    <Button Text="Overdue"
+                            Clicked="OnFilterOverdueClicked" />
+                </HorizontalStackLayout>
+            </ScrollView>
+
+            <CollectionView ItemsSource="{Binding Tasks}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedTask}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:SpiritualTask">
+                        <Border Style="{StaticResource CardStyle}"
+                                Margin="0,0,0,10">
+                            <Grid ColumnDefinitions="Auto, *, Auto"
+                                  ColumnSpacing="10">
+                                <CheckBox Grid.Column="0"
+                                          IsChecked="{Binding IsCompleted}"
+                                          VerticalOptions="Center" />
+                                <VerticalStackLayout Grid.Column="1"
+                                                     Spacing="3">
+                                    <Label Text="{Binding Title}"
+                                           Style="{StaticResource Body1Strong}" />
+                                    <Label Text="{Binding Description}"
+                                           Style="{StaticResource Caption1}" />
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Label Text="{Binding Priority}"
+                                               Style="{StaticResource Caption1Strong}" />
+                                        <Label Text="{Binding DueDate, StringFormat='Due: {0:d}'}"
+                                               Style="{StaticResource Caption2}"
+                                               IsVisible="{Binding DueDate, Converter={toolkit:IsNotNullConverter}}" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                                <Label Grid.Column="2"
+                                       Text="{Binding Status}"
+                                       Style="{StaticResource Caption1}"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <HorizontalStackLayout Spacing="15">
+                <Button Text="Toggle Complete"
+                        Command="{Binding ToggleCompleteCommand}" />
+                <Button Text="Delete"
+                        Command="{Binding DeleteTaskCommand}"
+                        BackgroundColor="{StaticResource Magenta}" />
+            </HorizontalStackLayout>
+
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Add Task"
+                           Style="{StaticResource Body1Strong}" />
+
+                    <sf:SfTextInputLayout Hint="Title"
+                                          ContainerType="Outlined">
+                        <Entry Text="{Binding Title}" />
+                    </sf:SfTextInputLayout>
+
+                    <sf:SfTextInputLayout Hint="Description"
+                                          ContainerType="Outlined">
+                        <Editor Text="{Binding Description}"
+                                AutoSize="TextChanges" />
+                    </sf:SfTextInputLayout>
+
+                    <sf:SfTextInputLayout Hint="Category"
+                                          ContainerType="Outlined">
+                        <Entry Text="{Binding Category}" />
+                    </sf:SfTextInputLayout>
+
+                    <Grid ColumnDefinitions="*, *"
+                          ColumnSpacing="10">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="5">
+                            <Label Text="Priority"
+                                   Style="{StaticResource Caption1Strong}" />
+                            <Picker SelectedItem="{Binding SelectedPriority}">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type enums:TaskPriority}">
+                                        <x:Static Member="enums:TaskPriority.Low" />
+                                        <x:Static Member="enums:TaskPriority.Medium" />
+                                        <x:Static Member="enums:TaskPriority.High" />
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="5">
+                            <Label Text="Due Date"
+                                   Style="{StaticResource Caption1Strong}" />
+                            <DatePicker Date="{Binding DueDate}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Button Text="Save"
+                            Command="{Binding SaveTaskCommand}" />
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

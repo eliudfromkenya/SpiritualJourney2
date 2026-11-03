@@ -8,3 +8,4 @@ global using SpiritualJourney.Services.Contracts;
 global using SpiritualJourney.Models;
 global using SpiritualJourney.PageModels;
 global using SpiritualJourney.Pages;
+global using TaskStatus = SpiritualJourney.Core.Enums.TaskStatus;

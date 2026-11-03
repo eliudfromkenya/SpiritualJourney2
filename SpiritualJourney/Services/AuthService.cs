@@ -96,6 +96,42 @@ public class AuthService : IAuthService
         CurrentUser = null;
     }
 
+    /// <inheritdoc/>
+    public async Task<bool> RegisterAsync(string displayName, string email, string password, CancellationToken ct = default)
+    {
+        var existing = await FindUserByEmailAsync(email, ct).ConfigureAwait(false);
+        if (existing is not null)
+        {
+            return false;
+        }
+
+        var user = new AppUser
+        {
+            DisplayName = displayName,
+            Email = email,
+            Provider = AuthProvider.Email,
+            PasswordHash = HashPassword(password)
+        };
+        await _users.SaveAsync(user, ct).ConfigureAwait(false);
+        await CreateSessionAsync(user, ct).ConfigureAwait(false);
+        return true;
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> ResetPasswordAsync(string email, string newPassword, CancellationToken ct = default)
+    {
+        var user = await FindUserByEmailAsync(email, ct).ConfigureAwait(false);
+        if (user is null)
+        {
+            return false;
+        }
+
+        user.PasswordHash = HashPassword(newPassword);
+        user.UpdatedAtUtc = DateTime.UtcNow;
+        await _users.SaveAsync(user, ct).ConfigureAwait(false);
+        return true;
+    }
+
     private async Task<AppUser?> FindUserByEmailAsync(string email, CancellationToken ct)
     {
         var users = await _users.ListAsync(u => u.Email == email, ct).ConfigureAwait(false);
