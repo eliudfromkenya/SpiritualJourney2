@@ -1,33 +1,34 @@
-namespace SpiritualJourney.Services
+using CommunityToolkit.Maui;
+
+namespace SpiritualJourney.Services;
+
+/// <summary>
+/// Displays unhandled exceptions to the user as a modal alert, serialized
+/// through a semaphore to avoid overlapping dialogs.
+/// </summary>
+public class ModalErrorHandler : IErrorHandler
 {
-    /// <summary>
-    /// Modal Error Handler.
-    /// </summary>
-    public class ModalErrorHandler : IErrorHandler
+    private readonly SemaphoreSlim _semaphore = new(1, 1);
+
+    /// <inheritdoc/>
+    public void HandleError(Exception ex)
     {
-        SemaphoreSlim _semaphore = new(1, 1);
+        DisplayAlertAsync(ex).FireAndForgetSafeAsync();
+    }
 
-        /// <summary>
-        /// Handle error in UI.
-        /// </summary>
-        /// <param name="ex">Exception.</param>
-        public void HandleError(Exception ex)
+    private async Task DisplayAlertAsync(Exception ex)
+    {
+        try
         {
-            DisplayAlertAsync(ex).FireAndForgetSafeAsync();
+            await _semaphore.WaitAsync().ConfigureAwait(false);
+            if (Shell.Current is Shell shell)
+            {
+                await shell.DisplayAlertAsync("Error", ex.Message, "OK").ConfigureAwait(false);
+            }
         }
-
-        async Task DisplayAlertAsync(Exception ex)
+        finally
         {
-            try
-            {
-                await _semaphore.WaitAsync();
-                if (Shell.Current is Shell shell)
-                    await shell.DisplayAlertAsync("Error", ex.Message, "OK");
-            }
-            finally
-            {
-                _semaphore.Release();
-            }
+            _semaphore.Release();
         }
     }
 }
